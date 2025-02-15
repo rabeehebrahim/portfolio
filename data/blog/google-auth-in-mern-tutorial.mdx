@@ -1,0 +1,359 @@
+---
+title: How to Implement Google Authentication in MERN Stack Application
+date: '2025-01-07'
+tags: ['aws', 'reactjs', 'nodejs']
+draft: false
+summary: Implement Google authentication in a MERN Stack Application
+---
+
+## Introduction
+
+Authentication is the process of verifying a user's identity in an application. You can authenticate through email and password, email, phone, etc. Today, we are talking about authentication via the Google sign-in method in a MERN stack application.
+
+Using Google authentication, you can log in and sign up with a Gmail account. This authentication method is used on many websites. Implementing Google authentication in a MERN application is a piece of cake. 
+
+## **Prerequisites**
+
+- Knows how to create a web application in React.js.
+- Knows how to create a server in Node.js.
+
+### In this tutorial:
+
+- You will create a frontend application with a login page.
+- You will configure Google authentication in the Google Cloud Console.
+- You will create a backend application with a login API to process the data from the frontend.
+
+Without further ado, let's build the app.
+
+## What is Authentication?
+
+Before getting started, you need to know what authentication is. Authentication is the process of verifying a user's identity before granting them access to the application. In here the user identity can be a password and email, email, phone, etc.
+
+When the user is authenticated, the server will respond with a token, and later we use this token to authorise the user for different services.
+
+## What is a JWT Token?
+
+So, the token as a response after authentication is in JWT format. What is JWT? It is the full form for JSON Web Token. JWT contains the vital information about the user. In order to create and decode JWT, you need a secret key. The info stored inside the JWT can be accessed by anyone, so you have to verify the JWT on every API request.
+
+## Frontend Application
+
+### Step 1: Initiate a React Project using Vite:
+
+Follow these steps to create a React web application.
+
+```bash
+npm create vite@latest
+
+cd [yourprojectname]
+
+npm install 
+```
+
+### **1. Add the Code Below in App.jsx**
+
+App.jsx contains ready-made codes that come with installing Vite. Remove all of them, and your file should look like this.
+
+```jsx
+import './App.css'
+
+function App() {
+
+  return (
+    <div>
+    
+    </div>
+  )
+}
+
+export default App
+```
+
+### Step 2: Create an Account in the Google Cloud Console
+
+### 1. Create a Project
+
+Go to Google Cloud and click “Select a project” and select “NEW PROJECT”. 
+
+
+!["New Project" button in Google Cloud Console](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/x4wr3n59szfwv1gt87d9.png)
+
+Enter the project name and click “Create”. Now, if you click the “Select a project” dropdown, you can see the project you have created. Finally, select your project. 
+
+### 2. Create OAuth Consent Screen
+
+From the home screen, select “APIs & Services”. Click “OAuth consent screen” from the side panel. Choose “External” as User Type and click “Create”.
+
+### 3. Fill the App Information
+
+In the “App Information” form, fill the App name, User support email and email addresses under the Developer Contact Information label. Click “SAVE AND CONTINUE” button.
+
+![App information form in Google Cloud Console](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/tfot21rtc2a1bwmho5ew.png)
+
+![Developer contact information form in Google Cloud Console](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/56zk4pywccwejpc2l1h9.png)
+
+### 4. Add the Scope
+
+After saving the App Information you will redirect to scope page. Scope is the setting of permission that you want from a Gmail account. For example, here we only need the email address of the user. 
+
+Click on “ADD OR REMOVE SCOPES” and select “…auth/userinfo.email” and “…auth/userinfo.profile” from the list and click the “UPDATE” button.
+
+
+![Scope update form in Google Cloud Console](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/fr768kzobvpw5wcfmv2q.png)
+
+Click “Save and Continue” from the bottom page. 
+
+### 5. Add Test User
+
+We are using Google Authentication in development (localhost). To test the login functionality, we need to add Gmail accounts for development testing. Click "Add Users" to add Gmail accounts. You can add up to 100 accounts.
+
+### 6. Summary
+
+In the summary page you will get all the details of the data you filled. Scroll to the bottom and click “Back to Dashboard.”.
+
+Finally, we created an OAuth Consent Screen. Now we need to create credentials to use in our code.
+
+### 7. Create a Credential
+
+Go to “Credentials” from the side panel and click “Create Credentials” then select “OAuth client ID”.
+
+![APIs & Services section in Google Cloud Console](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/oqvkptx8jp616guzxxas.png)
+
+In the OAuth client ID creation form, choose “Web application” and application type. Give a name for this OAuth ID. And lastly, add **`http://localhost:5173`** in the “Authorized JavaScript origins” and “Authorized redirect URI’s” fields.
+
+![OAuth client ID creation form in Google Cloud Console](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/2oo0ihir4p6m9gjk7tv9.png)
+
+Finally, click “Create” button. A modal will popup with your client id and client secret id like below. Keep this credential keys to use in the project. Now lets get into our code editor. 
+
+![OAuth Client details modal in Google Cloud Console](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/adwj4rfrtufho8ie7xvv.png)
+
+### Step 3: Implementing Google Auth SDK in React
+
+Install the **`React OAuth2 | Google`** npm package by running the following command:
+
+```bash
+npm i @react-oauth/google
+```
+
+Create a `.env` file inside the `src` folder and add the following value. This approach helps prevent exposing your `clientId` to the public when pushing code to GitHub.
+
+```bash
+VITE_GOOGLE_CLIENT_ID=yourgoogleclientid
+```
+
+From **React OAuth2 | Google**, you get the Google sign-in component. You need to wrap `GoogleOAuthProvider` in `main.jsx` file. 
+
+```jsx
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import { GoogleOAuthProvider } from "@react-oauth/google";
+import "./index.css";
+import App from "./App.jsx";
+
+const CLIENTID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+
+createRoot(document.getElementById("root")).render(
+  <StrictMode>
+    <GoogleOAuthProvider clientId={CLIENTID}>
+      <App />
+    </GoogleOAuthProvider>
+  </StrictMode>
+);
+
+```
+
+Here, `import.meta.env.VITE_SERVER_URL` retrieves the Google client ID that you stored earlier in the `.env` file.
+
+Now, go to app.jsx and import GoogleLogin component from the `@react-oauth/google` package.
+
+```jsx
+import "./App.css";
+import { GoogleLogin } from "@react-oauth/google";
+
+function App() {
+  return (
+    <div>
+      <GoogleLogin
+        onSuccess={(credentialResponse) => {
+          const post = await axios.post('http://localhost:5000/login', credentialResponse)
+          console.log(post)
+        }}
+        onError={() => {
+          console.log("Login Failed");
+        }}
+      />
+      <h1>Welcome to the Home Page</h1>
+    </div>
+  );
+}
+
+export default App;
+```
+
+You're all set! Run the frontend project using `npm run dev` and open it in your browser. You should now see the 'Sign in with Google' option. Clicking it will display a list of Gmail accounts you are logged into with your Google account. Select the Gmail account you added as a test user while creating the OAuth consent screen.
+
+After a successful login, you'll see a log in the browser console that looks like this:
+
+```jsx
+{
+    "credential": "eyJhbGciOiJSUzI1....mKg",
+    "clientId": "923437...bpdbch42nu.apps.googleusercontent.com",
+    "select_by": "btn"
+}
+```
+
+The `credential` field is what we need to send to the backend for further processing, such as retrieving the email address and other details. Your frontend folder structure will look like this:
+
+```yaml
+frontend:
+ - node_modules
+ - public
+ - src
+	 - assets
+	 - App.css
+	 - App.jsx
+	 - index.css
+	 - main.jsx
+ - .env
+ - .gitignore
+ - eslint.config.js
+ - index.html
+ - package-lock.json 
+ - package.json
+ - README.md
+ - vite.config.js
+```
+
+## Backend Application
+
+Create a folder for the backend and add an `index.js` file inside it. Then, add the following code to the `index.js` file.
+
+```jsx
+const express = require("express");
+const cors = require("cors")
+const {OAuth2Client} = require("google-auth-library")
+
+const app = express();
+
+app.use(cors())
+app.use(express.json());
+
+app.post("/login", async (req, res) => {
+  try {
+    const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+
+    const body = req.body;
+
+    if (!body) {
+      throw new AppError("No google credentials provided!", 400);
+    }
+
+    // Verify Google token
+    const ticket = await client.verifyIdToken({
+      idToken: body.credential,
+      audience: process.env.GOOGLE_CLIENT_ID,
+    });
+
+    // Get payload from verified token
+    const payload = ticket.getPayload();
+
+    // Now we can trust this data as it's verified by Google
+    const { email } = payload;
+
+    res.status(200).json({
+      status: true,
+      message: "Successfully logged in",
+      data: email,
+    });
+  } catch (error) {
+    res.status(200).json({
+      status: false,
+      message: "Error occured!",
+      errorMessage: error.message
+    });
+  }
+});
+
+app.listen(5000, () => {
+  console.log("Listening to Port 5000");
+});
+
+```
+
+`OAuth2Client` is a package from `google-auth-library` that helps verify the credentials passed from the frontend. After verifying these credential details in the backend, you can retrieve the Gmail ID from the payload
+
+`CORS` (Cross-Origin Resource Sharing) is a browser security mechanism that prevents resource sharing between different origins. Due to the browser's implementation of the same-origin policy, it cannot fetch data from a different origin (URL) by default. To address this, you install the cors package in Node.js. This package allows you to include the Access-Control-Allow-Origin header in every response to the client, enabling the browser to accept the response.
+
+`client.verifyIdToken` will verify the credential passed from the backend. And `ticket.getPayload()` will return the user data from it. You can destructure email from the value returned from `ticket.getPayload()`.  
+
+Run the following command to install the packages mentioned in the `index.js` file:
+
+```bash
+npm i cors express google-auth-library
+```
+
+Your backend folder structure will look like this:
+
+```yaml
+backend:
+ - node_modules
+ - .env
+ - index.js
+ - package-lock.json
+ - package.json
+```
+
+Now open the terminal in your code editor and run both client and server using the `npm run dev` command. Open your browser to see the frontend UI. You will see a text "Welcome to the Home Page" along with a "Sign in with Google" button. Click the button and choose the Gmail account you added when configuring the app information in Google Console.
+
+After successful authentication, you will see the response data in the console panel like this:
+
+![Console log of response in browser](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/dt1ry1fxg9xesiamqtb0.png)
+
+## Let's recap what we accomplished:
+
+- Created a frontend project and implemented the GoogleOAuthProvider login component from the `@react-oauth/google` package.
+- Set up a project in Google Cloud Console and configured the Google authentication process.
+- Built a backend server to receive credential data from the frontend, process it, and retrieve Gmail user information.
+
+## What to do Next?
+
+Now you have successfully authenticated the Google account. We haven't implemented the additional logic, such as verifying if a user with the Gmail address exists in the database. If the user exists, send a login response; otherwise, throw an error.
+
+```jsx
+app.post("/login", async (req, res) => {
+  try {
+  
+    // ***your previous code...***
+
+    // Verify Google token
+    const ticket = await client.verifyIdToken({
+      idToken: body.credential,
+      audience: process.env.GOOGLE_CLIENT_ID,
+    });
+
+    // Get payload from verified token
+    const payload = ticket.getPayload();
+
+    // Now we can trust this data as it's verified by Google
+    const { email } = payload;
+		
+		// After retrieving the email, check the database to determine if this 
+		// email address associated with any user. If yes then create an authentication
+		// token and send the token along with the response message or else send error message 
+		// that user with the email address doesn't exist.
+		
+    res.status(200).json({
+      status: true,
+      message: "Successfully logged in",
+      data: token,
+    });
+  } catch (error) {
+    res.status(200).json({
+      status: false,
+      message: "Error occured!",
+      errorMessage: error.message
+    });
+  }
+});
+```
+
+> Thank you for reading! Please share this article if you found it useful.
