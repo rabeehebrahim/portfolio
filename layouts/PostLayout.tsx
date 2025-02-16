@@ -75,13 +75,13 @@ export default function PostLayout({ content, authorDetails, next, prev, childre
                         <dt className="sr-only">Name</dt>
                         <dd className="text-gray-900 dark:text-gray-100">{author.name}</dd>
                         <dt className="sr-only">Twitter</dt>
-                        <dd>                          
+                        <dd>
                           {author.linkedin && (
                             <Link
                               href={author.linkedin}
                               className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
                             >
-                             @Linkedin                             
+                              @Linkedin
                             </Link>
                           )}
                         </dd>
