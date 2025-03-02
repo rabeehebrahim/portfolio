@@ -9,6 +9,7 @@ import Link from '@/components/Link'
 import Tag from '@/components/Tag'
 import siteMetadata from '@/data/siteMetadata'
 import tagData from 'app/tag-data.json'
+import Image from 'next/image'
 
 interface PaginationProps {
   totalPages: number
@@ -130,7 +131,19 @@ export default function ListLayoutWithTags({
                 const { path, date, title, summary, tags } = post
                 return (
                   <li key={path} className="py-5">
-                    <article className="flex flex-col space-y-2 xl:space-y-0">
+                    <div className='flex justify-center items-start gap-5'>
+                
+                    <Image                          
+                        height={150}
+                        width={150}                        
+                        alt={'blog thumbnail image'}
+                        src={post.images}                          
+                      />
+                      
+                    <article className="flex gap-5">  {/* space-y-2 xl:space-y-0 */}
+
+          
+                     <div>   
                       <dl>
                         <dt className="sr-only">Published on</dt>
                         <dd className="text-base leading-6 font-medium text-gray-500 dark:text-gray-400">
@@ -154,7 +167,9 @@ export default function ListLayoutWithTags({
                           {summary}
                         </div>
                       </div>
+                     </div>
                     </article>
+                    </div>
                   </li>
                 )
               })}
