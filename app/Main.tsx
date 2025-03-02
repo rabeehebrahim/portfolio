@@ -3,6 +3,7 @@ import Tag from '@/components/Tag'
 import siteMetadata from '@/data/siteMetadata'
 import { formatDate } from 'pliny/utils/formatDate'
 import NewsletterForm from 'pliny/ui/NewsletterForm'
+import Image from 'next/image'
 
 const MAX_DISPLAY = 5
 
@@ -25,14 +26,17 @@ export default function Home({ posts }) {
             return (
               <li key={slug} className="py-12">
                 <article>
-                  <div className="space-y-2 xl:grid xl:grid-cols-4 xl:items-baseline xl:space-y-0">
-                    <dl>
-                      <dt className="sr-only">Published on</dt>
-                      <dd className="text-base leading-6 font-medium text-gray-500 dark:text-gray-400">
-                        <time dateTime={date}>{formatDate(date, siteMetadata.locale)}</time>
-                      </dd>
-                    </dl>
-                    <div className="space-y-5 xl:col-span-3">
+                  <div className="space-y-2 lg:grid lg:grid-cols-3 xl:grid xl:grid-cols-4 xl:space-y-0">
+                
+                      <Image
+                        className='xl:block hidden'
+                        height={250}
+                        width={250}
+                        alt={'blog thumbnail image'}
+                        src={post.images}
+                      />
+                      
+                    <div className="space-y-5 col-span-3 ml-5">
                       <div className="space-y-6">
                         <div>
                           <h2 className="text-2xl leading-8 font-bold tracking-tight">
@@ -43,6 +47,14 @@ export default function Home({ posts }) {
                               {title}
                             </Link>
                           </h2>
+
+                          <dl className='mt-2 mb-5'>
+                            <dt className="sr-only">Published on</dt>
+                            <dd className="text-base leading-6 font-medium text-gray-500 dark:text-gray-400">
+                              <time dateTime={date}>{formatDate(date, siteMetadata.locale)}</time>
+                            </dd>
+                          </dl>
+
                           <div className="flex flex-wrap">
                             {tags.map((tag) => (
                               <Tag key={tag} text={tag} />
@@ -53,7 +65,8 @@ export default function Home({ posts }) {
                           {summary}
                         </div>
                       </div>
-                      <div className="text-base leading-6 font-medium">
+                 
+                      <div className="text-base leading-6 font-medium relative top-5">
                         <Link
                           href={`/blog/${slug}`}
                           className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
@@ -61,7 +74,15 @@ export default function Home({ posts }) {
                         >
                           Read more &rarr;
                         </Link>
+                      <Image
+                        className='mt-3 xl:hidden'
+                        height={250}
+                        width={250}
+                        alt={'blog thumbnail image'}
+                        src={post.images}
+                      />
                       </div>
+
                     </div>
                   </div>
                 </article>
