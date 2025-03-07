@@ -131,44 +131,46 @@ export default function ListLayoutWithTags({
                 const { path, date, title, summary, tags } = post
                 return (
                   <li key={path} className="py-5">
-                    <div className='flex justify-center items-start gap-5'>
-                
-                    <Image                          
+                    <div className="flex items-start justify-center gap-5">
+                      <Image
                         height={150}
-                        width={150}                        
+                        width={150}
                         alt={'blog thumbnail image'}
-                        src={post.images}                          
+                        src={post.images}
                       />
-                      
-                    <article className="flex gap-5">  {/* space-y-2 xl:space-y-0 */}
 
-          
-                     <div>   
-                      <dl>
-                        <dt className="sr-only">Published on</dt>
-                        <dd className="text-base leading-6 font-medium text-gray-500 dark:text-gray-400">
-                          <time dateTime={date} suppressHydrationWarning>
-                            {formatDate(date, siteMetadata.locale)}
-                          </time>
-                        </dd>
-                      </dl>
-                      <div className="space-y-3">
+                      <article className="flex gap-5">
+                        {' '}
+                        {/* space-y-2 xl:space-y-0 */}
                         <div>
-                          <h2 className="text-2xl leading-8 font-bold tracking-tight">
-                            <Link href={`/${path}`} className="text-gray-900 dark:text-gray-100">
-                              {title}
-                            </Link>
-                          </h2>
-                          <div className="flex flex-wrap">
-                            {tags?.map((tag) => <Tag key={tag} text={tag} />)}
+                          <dl>
+                            <dt className="sr-only">Published on</dt>
+                            <dd className="text-base leading-6 font-medium text-gray-500 dark:text-gray-400">
+                              <time dateTime={date} suppressHydrationWarning>
+                                {formatDate(date, siteMetadata.locale)}
+                              </time>
+                            </dd>
+                          </dl>
+                          <div className="space-y-3">
+                            <div>
+                              <h2 className="text-2xl leading-8 font-bold tracking-tight">
+                                <Link
+                                  href={`/${path}`}
+                                  className="text-gray-900 dark:text-gray-100"
+                                >
+                                  {title}
+                                </Link>
+                              </h2>
+                              <div className="flex flex-wrap">
+                                {tags?.map((tag) => <Tag key={tag} text={tag} />)}
+                              </div>
+                            </div>
+                            <div className="prose max-w-none text-gray-500 dark:text-gray-400">
+                              {summary}
+                            </div>
                           </div>
                         </div>
-                        <div className="prose max-w-none text-gray-500 dark:text-gray-400">
-                          {summary}
-                        </div>
-                      </div>
-                     </div>
-                    </article>
+                      </article>
                     </div>
                   </li>
                 )

@@ -60,7 +60,7 @@ export default function PostLayout({ content, authorDetails, next, prev, childre
               <dt className="sr-only">Authors</dt>
               <dd>
                 <ul className="flex flex-wrap justify-center gap-4 sm:space-x-12 xl:block xl:space-y-8 xl:space-x-0">
-                  <Image src={images} height={250} width={250} alt='post thumbnail' />
+                  <Image src={images} height={250} width={250} alt="post thumbnail" />
                 </ul>
               </dd>
             </dl>

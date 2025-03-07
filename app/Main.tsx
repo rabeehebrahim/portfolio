@@ -27,16 +27,15 @@ export default function Home({ posts }) {
               <li key={slug} className="py-12">
                 <article>
                   <div className="space-y-2 lg:grid lg:grid-cols-3 xl:grid xl:grid-cols-4 xl:space-y-0">
-                
-                      <Image
-                        className='xl:block hidden'
-                        height={250}
-                        width={250}
-                        alt={'blog thumbnail image'}
-                        src={post.images}
-                      />
-                      
-                    <div className="space-y-5 col-span-3 ml-5">
+                    <Image
+                      className="hidden xl:block"
+                      height={250}
+                      width={250}
+                      alt={'blog thumbnail image'}
+                      src={post.images}
+                    />
+
+                    <div className="col-span-3 ml-5 space-y-5">
                       <div className="space-y-6">
                         <div>
                           <h2 className="text-2xl leading-8 font-bold tracking-tight">
@@ -48,7 +47,7 @@ export default function Home({ posts }) {
                             </Link>
                           </h2>
 
-                          <dl className='mt-2 mb-5'>
+                          <dl className="mt-2 mb-5">
                             <dt className="sr-only">Published on</dt>
                             <dd className="text-base leading-6 font-medium text-gray-500 dark:text-gray-400">
                               <time dateTime={date}>{formatDate(date, siteMetadata.locale)}</time>
@@ -65,8 +64,8 @@ export default function Home({ posts }) {
                           {summary}
                         </div>
                       </div>
-                 
-                      <div className="text-base leading-6 font-medium relative top-5">
+
+                      <div className="relative top-5 text-base leading-6 font-medium">
                         <Link
                           href={`/blog/${slug}`}
                           className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
@@ -74,15 +73,14 @@ export default function Home({ posts }) {
                         >
                           Read more &rarr;
                         </Link>
-                      <Image
-                        className='mt-3 xl:hidden'
-                        height={250}
-                        width={250}
-                        alt={'blog thumbnail image'}
-                        src={post.images}
-                      />
+                        <Image
+                          className="mt-3 xl:hidden"
+                          height={250}
+                          width={250}
+                          alt={'blog thumbnail image'}
+                          src={post.images}
+                        />
                       </div>
-
                     </div>
                   </div>
                 </article>
